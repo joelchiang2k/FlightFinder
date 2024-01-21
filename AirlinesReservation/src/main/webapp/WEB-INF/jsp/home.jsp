@@ -16,11 +16,11 @@
 	<td><a href="home">Home</a></td><td>|</td>
 	<td><a href="userForm">User Form</a></td><td>|</td>
 	<td><a href="roleForm">Role Form</a></td><td>|</td>
-	<td><a href="accountForm">Account Form</a></td><td>|</td>
-	<td><a href="customerForm">Customer Form</a></td><td>|</td>
-	<td><a href="branchForm">Branch Form</a></td></td><td>|</td>
-	<td><a href="bankTransactionForm">Bank Transaction Form</a></td><td>|</td>
-	<td><a href="searchForm">Search Form</a></td>
+	<td><a href="airportForm">Airport Form</a></td><td>|</td>
+	<td><a href="airlineForm">Airline Form</a></td><td>|</td>
+	<td><a href="flightForm">Flight Form</a></td><td>|</td>
+	<td><a href="passengerForm">Passenger Form</a></td><td>|</td>
+	<td><a href="reservationList">Reservation List</a></td>
 	
 	<sec:authorize access="isAuthenticated()">
 	<td>|</td>

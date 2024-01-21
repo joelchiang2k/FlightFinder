@@ -9,6 +9,8 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -36,7 +38,7 @@ public class AppConfig {
 		dataSource.setUsername("root");
 		dataSource.setPassword("60Alif37ea");
 		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-		dataSource.setUrl("jdbc:mysql://localhost:3306/airlines?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC");
+		dataSource.setUrl("jdbc:mysql://localhost:3306/airlinesdb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC");
 		return dataSource;
 	}
 	
@@ -69,12 +71,12 @@ public class AppConfig {
 //	NoOpPasswordEncoder noOpPasswordEncoder() {
 //		return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
 //	}
-//	
-//	@Bean
-//	BCryptPasswordEncoder bCryptPasswordEncoder() {
-//		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-//		String encrypted = encoder.encode("joel");
-//		System.out.println("encrypted:" + encrypted);
-//		return encoder;
-//	}
+	
+	@Bean
+	BCryptPasswordEncoder bCryptPasswordEncoder() {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		String encrypted = encoder.encode("joel");
+		System.out.println("encrypted:" + encrypted);
+		return encoder;
+	}
 }

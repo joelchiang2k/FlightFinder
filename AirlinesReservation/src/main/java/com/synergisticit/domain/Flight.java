@@ -27,9 +27,11 @@ public class Flight {
 	private String flightNumber;
 	
 	@ManyToOne
-	private Airlines flightAirlines;
+	private Airline flightAirlines;
 	
 	private String flightDepartureCity;
+	
+	private String flightAirportCode;
 	
 	private String flightArrivalCity;
 	
