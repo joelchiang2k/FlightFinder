@@ -24,8 +24,5 @@ FlightFinder is a web application that allows users to search for available flig
 2. **Select a Flight**: Choose from the list of available flights and proceed to book the desired flight.
 3. **Book a Flight**: Provide the necessary passenger information and confirm the booking to complete the process.
 
-## License
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ## Acknowledgements
 FlightFinder makes use of several open-source libraries and frameworks. We acknowledge and thank the developers and contributors of these projects for their valuable contributions.
