@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="f"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
@@ -26,12 +27,15 @@ color
 	<td><a href="airportForm">Airport Form</a></td><td>|</td>
 	<td><a href="airlineForm">Airline Form</a></td><td>|</td>
 	<td><a href="flightForm">Flight Form</a></td><td>|</td>
-	<td><a href="passengerForm">Passenger Form</a></td><td>|</td>
+	<td><a href="searchForm">Search Form</a></td><td>|</td>
+	<td><a href="searchUserInfoForm">Search User Form</a></td><td>|</td>
+	<td><a href="passengerList">Passenger List</a></td><td>|</td>
 	<td><a href="reservationList">Reservation List</a></td>
 	
 	<sec:authorize access="isAuthenticated()">
 	<td>|</td>
 		<br> loggedInUser: ${loggedInUser}
+		<br>Granted Authorities: <sec:authentication property="principal.authorities"/>
 		<td><a href="logout">Logout</a></td>
 	</sec:authorize>
 	<td></td>
@@ -45,6 +49,7 @@ color
 <body>
 	<div align="center">
 		<h1>Flight List</h1>
+		<sec:authorize access="hasAuthority('Admin')">
 		<f:form action="saveFlight" modelAttribute="flight">
 			<table>
 			
@@ -116,11 +121,13 @@ color
 					<td><f:errors path="flightPrice" cssClass="error" /></td>
 				</tr>
 				
+				
 				<tr>
-					<td>Flight Seats Booked:</td>
-					<td><f:input path="flightSeatsBook" value="${flight.flightSeatsBook}"/></td>
-					<td><f:errors path="flightSeatsBook" cssClass="error" /></td>
+				    <td>Flight Seats Booked:</td>
+				    <td><input type="text" name="flightSeatsBook" value="${flight.flightSeatsBook}" readonly="readonly" /></td>
+				    <td><f:errors path="flightSeatsBook" cssClass="error" /></td>
 				</tr>
+
 				
 				 			
 			</table>
@@ -128,6 +135,7 @@ color
 				<td colspan="2" align="center"><input type="submit"   value="Submit" /></td>
 			</tr>
 		</f:form>
+		</sec:authorize>
 	</div>
 	<p></p>
 	<p></p>

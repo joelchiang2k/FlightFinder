@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="f"%>
-
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
@@ -22,13 +22,15 @@
 	<td><a href="airportForm">Airport Form</a></td><td>|</td>
 	<td><a href="airlineForm">Airline Form</a></td><td>|</td>
 	<td><a href="flightForm">Flight Form</a></td><td>|</td>
-	<td><a href="passengerForm">Passenger Form</a></td><td>|</td>
+	<td><a href="searchForm">Search Form</a></td><td>|</td>
+	<td><a href="searchUserInfoForm">Search User Form</a></td><td>|</td>
+	<td><a href="passengerList">Passenger List</a></td><td>|</td>
 	<td><a href="reservationList">Reservation List</a></td>
 	
 	<sec:authorize access="isAuthenticated()">
 	<td>|</td>
-		<br>Granted Authorities: <sec:authentication property="principal.authorities"/>
 		<br> loggedInUser: ${loggedInUser}
+		<br>Granted Authorities: <sec:authentication property="principal.authorities"/>
 		<td><a href="logout">Logout</a></td>
 	</sec:authorize>
 	<td></td>
@@ -42,7 +44,7 @@
 
 <h1>User Form</h1>
 
-
+<sec:authorize access="hasAuthority('Admin')">
 <f:form action="saveUser" modelAttribute="user">
 <table>
 	<tr>
@@ -91,14 +93,17 @@
 </tr>
 </table>
 </f:form>
-
+</sec:authorize>
 </div>
 
 <div align="center">
 
 <table border="1">
 <thead>
-<tr><td>User Id</td><td>Name</td><td>Password</td><td>Email</td>
+<tr>
+<td>User Id</td>
+<td>Name</td>
+<td>Email</td>
 <td>Roles</td>
 <td>Action</td>
 </tr>
@@ -108,7 +113,6 @@
 <tr>
 <td>${user.getUserId() }</td>
 <td>${user.getUsername() }</td>
-<td>${user.getPassword() }</td>
 <td>${user.getEmail() }</td>
 
 <td>

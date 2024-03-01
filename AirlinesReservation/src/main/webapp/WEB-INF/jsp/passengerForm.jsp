@@ -10,12 +10,10 @@
 <meta charset="ISO-8859-1">
 <title>Passenger Form</title>
 <style type="text/css">
-.error
-(
-color
-:red
-;
-)
+.error {
+    color: red;
+}
+</style>
 </style>
 </head>
 <div align="center">
@@ -27,13 +25,17 @@ color
 	<td><a href="airportForm">Airport Form</a></td><td>|</td>
 	<td><a href="airlineForm">Airline Form</a></td><td>|</td>
 	<td><a href="flightForm">Flight Form</a></td><td>|</td>
-	<td><a href="passengerForm">Passenger Form</a></td><td>|</td>
+	<td><a href="searchForm">Search Form</a></td><td>|</td>
+	<td><a href="searchUserInfoForm">Search User Form</a></td><td>|</td>
+	<td><a href="passengerList">Passenger List</a></td><td>|</td>
 	<td><a href="reservationList">Reservation List</a></td>
 	
 	
 	<sec:authorize access="isAuthenticated()">
 	<td>|</td>
 		<br> loggedInUser: ${loggedInUser}
+		<br>Granted Authorities: <sec:authentication property="principal.authorities"/>
+		
 		<td><a href="logout">Logout</a></td>
 	</sec:authorize>
 	<td></td>
@@ -46,74 +48,68 @@ color
 
 <body>
 	<div align="center">
-		<h1>Passenger Form</h1>
-		<f:form action="savePassenger" modelAttribute="passenger">
-			<table>
-			
-				<tr>
-					<td>Passenger Id:</td>
-					<td><f:input path="passengerId" value="${passenger.passengerId}"/></td>
-					<td><f:errors path="passengerId" cssClass="error" /></td>
-				</tr> 
-				
-				
-				<tr>
-					<td>Passenger First Name:</td>
-					<td><f:input path="passengerFirstName" value="${passenger.passengerFirstName}"/></td>
-					<td><f:errors path="passengerFirstName" cssClass="error" /></td>
-				</tr>
-				
-				<tr>
-					<td>Passenger Last Name:</td>
-					<td><f:input path="passengerLastName" value="${passenger.passengerLastName}"/></td>
-					<td><f:errors path="passengerLastName" cssClass="error" /></td>
-				</tr>
-				
-				<tr>
-					<td>Passenger Email:</td>
-					<td><f:input path="passengerEmail" value="${passenger.passengerEmail}"/></td>
-					<td><f:errors path="passengerEmail" cssClass="error" /></td>
-				</tr>
-				
-				<tr>
-					<td>Passenger Phone No:</td>
-					<td><f:input path="passengerPhoneNo" value="${passenger.passengerPhoneNo}"/></td>
-					<td><f:errors path="passengerPhoneNo" cssClass="error" /></td>
-				</tr>
-				
-				<tr>
-				    <td>Gender:</td>
-				    <td>
-				        <c:forEach items="${genders}" var="g">
-				            <c:choose>
-				                <c:when test="${selectedGender==g}">
-				                    <f:radiobutton path="passengerGender" name="passengerGender"  value="${g}" label="${g}" checked="true"/>
-				                </c:when>
-				                <c:otherwise>
-				                    <f:radiobutton path="passengerGender" name="passengerGender"  value="${g}" label="${g}" />
-				                </c:otherwise>
-				            </c:choose>
-				        </c:forEach>
-				    </td>
-				    <td><f:errors path="passengerGender" cssClass="error" /></td>
-				</tr>
-
-				
-				<tr>
-				    <td>DOB:</td>
-				    <td><f:input type="date" path="passengerDOB" name="passengerDOB" value="${passenger.getPassengerDOB()}"/></td>
-				    <td><f:errors path="passengerDOB" cssClass="error" /></td>
-				</tr>
-				
-				<input type="hidden" name="flightId" value="${flightId}" />
-    			<input type="hidden" name="passengerId" value="${passengerId}" />
-				 			
-			</table>
-			<tr>
-				<td colspan="2" align="center"><input type="submit"   value="Submit" /></td>
-			</tr>
-		</f:form>
+	    <h1>Passenger Form</h1>
+	    
+	    <c:choose>
+	        <c:when test="${empty numPassengers}">
+	            <form action="saveNumPassengers" method="post">
+	                <label for="numPassengers">Number of Passengers:</label>
+	                <input type="number" id="numPassengers" name="numPassengers" min="1" required>
+	                <br><br>
+	                <input type="hidden" name="flightId" value="${flightId}" />
+	                <input type="submit" value="Submit Number of Passengers">
+	            </form>
+	        </c:when>
+	        <c:otherwise>
+	            <form action="savePassenger" method="post">
+	                <c:forEach items="${passengersForm.passengers}" var="passenger" varStatus="loop">
+	                    <h2>Passenger ${loop.index + 1}</h2>
+	                    <table>
+	                        <tr>
+	                            <td>Passenger First Name:</td>
+	                            <td><f:input path="passengersForm.passengers[${loop.index}].passengerFirstName"/></td>
+	                            <td><f:errors path="passengersForm.passengers[${loop.index}].passengerFirstName" cssClass="error" /></td>
+	                        </tr>
+	                        <tr>
+	                            <td>Passenger Last Name:</td>
+	                            <td><f:input path="passengersForm.passengers[${loop.index}].passengerLastName"/></td>
+	                            <td><f:errors path="passengersForm.passengers[${loop.index}].passengerLastName" cssClass="error" /></td>
+	                        </tr>
+	                        <!-- Add other passenger fields as needed -->
+	                        <tr>
+	                            <td>Passenger Email:</td>
+	                            <td><f:input path="passengersForm.passengers[${loop.index}].passengerEmail"/></td>
+	                            <td><f:errors path="passengersForm.passengers[${loop.index}].passengerEmail" cssClass="error" /></td>
+	                        </tr>
+	                        <tr>
+	                            <td>Passenger Phone No:</td>
+	                            <td><f:input path="passengersForm.passengers[${loop.index}].passengerPhoneNo"/></td>
+	                            <td><f:errors path="passengersForm.passengers[${loop.index}].passengerPhoneNo" cssClass="error" /></td>
+	                        </tr>
+	                        <tr>
+	                            <td>Gender:</td>
+	                            <td>
+	                                <c:forEach items="${genders}" var="g">
+	                                    <f:radiobutton path="passengersForm.passengers[${loop.index}].passengerGender" value="${g}" label="${g}" />
+	                                </c:forEach>
+	                            </td>
+	                            <td><f:errors path="passengersForm.passengers[${loop.index}].passengerGender" cssClass="error" /></td>
+	                        </tr>
+	                        <tr>
+	                            <td>DOB:</td>
+	                            <td><f:input type="date" path="passengersForm.passengers[${loop.index}].passengerDOB"/></td>
+	                            <td><f:errors path="passengersForm.passengers[${loop.index}].passengerDOB" cssClass="error" /></td>
+	                        </tr>
+	                    </table>
+	                </c:forEach>
+	                <input type="hidden" name="flightId" value="${flightId}" />
+	   
+	                <input type="submit" value="Submit Passenger Details">
+	            </form>
+	        </c:otherwise>
+	    </c:choose>
 	</div>
+	
 	<p></p>
 	<p></p>
 	<div class="container-sm" align="center">
@@ -127,7 +123,6 @@ color
 					<td>Passenger Phone No</td>
 					<td>Gender</td>
 					<td>Passenger DOB</td>
-					<td>Address</td>
 				</tr>
 			</thead>
 			<c:forEach items="${passengers}" var="passenger">

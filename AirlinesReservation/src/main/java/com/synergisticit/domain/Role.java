@@ -3,6 +3,8 @@ package com.synergisticit.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
@@ -23,6 +25,7 @@ public class Role {
 	private String name;
 	
 	@ManyToMany(mappedBy = "roles")
+	@JsonIgnore
 	private List<User> users = new ArrayList<>();
 	
 	

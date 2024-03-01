@@ -1,12 +1,15 @@
 package com.synergisticit.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +24,7 @@ import com.synergisticit.service.AirlineService;
 import com.synergisticit.service.FlightService;
 import com.synergisticit.service.PassengerService;
 import com.synergisticit.service.ReservationService;
+import com.synergisticit.validation.ReservationValidator;
 
 import jakarta.validation.Valid;
 
@@ -30,21 +34,29 @@ public class ReservationController {
 	@Autowired ReservationService reservationService;
 	@Autowired FlightService flightService;
 	@Autowired PassengerService passengerService;
-	//@Autowired AccountValidator accountValidator;
+	@Autowired ReservationValidator reservationValidator;
 	
-//	@InitBinder
-//	public void initBinder(WebDataBinder binder) {
-//		binder.addValidators(accountValidator);
-//	}
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.addValidators(reservationValidator);
+	}
 	
 	@RequestMapping("/reservationForm")
-	public ModelAndView reservationForm(@ModelAttribute("reservation") Reservation reservation, 
+	public ModelAndView reservationForm(@ModelAttribute("reservation") Reservation reservation,
+			@RequestParam(name = "passengerId", required = false) Long passengerId,
 	        Model model, Principal principal) {
-		
-
 		ModelAndView mav = new ModelAndView("reservationForm");
 		
-	    getData(model);
+		if(passengerId != null) {
+			System.out.println("passengerId" + passengerId);
+			model.addAttribute("passengerId", passengerId);
+			Passenger passenger = passengerService.findById(passengerId);
+			System.out.println("passengerFlight" + passenger.getFlight().getFlightId());
+	    	//mav.addObject(passenger.getFlight().getFlightId());
+		}
+		
+	    
+		getData(model);
 		reservationList(model);
 		if(principal != null) {
 			model.addAttribute("loggedInUser", principal.getName());
@@ -74,11 +86,10 @@ public class ReservationController {
 	@RequestMapping("/reservationTemp")
 	public ModelAndView reservationTemp(Reservation reservation, 
 			@RequestParam(name = "flightId", required = false) Long flightId,
-	        @RequestParam(name = "passengerId", required = false) Long passengerId,
 	        Model model,  RedirectAttributes redirectAttributes, Principal principal) {
 		
 	    redirectAttributes.addFlashAttribute("flightId", flightId);
-	    redirectAttributes.addFlashAttribute("passengerId", passengerId);
+	    //redirectAttributes.addFlashAttribute("passengerId", passengerId);
 	    System.out.println("initialFlightId" + flightId);
 			
 		
@@ -89,15 +100,14 @@ public class ReservationController {
 		}
 		
 		
-		return new ModelAndView("redirect:/reservationForm?flightId=" + flightId + "&passengerId=" + passengerId);
+		return new ModelAndView("redirect:/reservationForm?flightId=" + flightId);
 	}
 	
 	
 	@RequestMapping("/saveReservation")
 	public ModelAndView saveReservation(@Valid @ModelAttribute Reservation reservation, 
             BindingResult br, 
-            @RequestParam(name = "flightId") Long flightId,
-            @RequestParam(name = "passengerId") Long passengerId,
+            @RequestParam(name = "passengerId", required = true) Long passengerId,
             Model model) {
 	    ModelAndView mav = new ModelAndView("reservationForm");
 
@@ -107,18 +117,26 @@ public class ReservationController {
 	        reservationList(model);
 	        return mav;
 	    } else {
-	    	 Flight flight = flightService.findById(flightId);
-	         Passenger passenger = passengerService.findById(passengerId);
-
-	         reservation.setPassenger(passenger);
+	    	 Passenger passenger = passengerService.findById(passengerId);
+	    	 Flight flight = flightService.findById(passenger.getFlight().getFlightId());
+	    	 List<Passenger> passengers = new ArrayList<Passenger>();
+	    	 passengers.add(passenger);
+	    	 reservation.setPassengers(passengers);
+	    	 for(Passenger p : passengers) {
+	    		 reservation.setPassenger(p);
+	    	 }
 	         reservation.setFlight(flight);
-
-	         System.out.println("reservation" + reservation.getPassenger().getPassengerFirstName());
+	         //reservation.setPassenger(passenger);
+	         //System.out.println("reservation" + reservation.getPassenger().getPassengerFirstName());
 	         System.out.println("reservationNumer" + reservation.getFlight().getFlightNumber());
-
+	         System.out.println(reservation.getPassengers().get(0).getPassengerFirstName());
+//	         int seatsBooked = flight.getFlightSeatsBook() + 1;
+//	         flight.setFlightSeatsBook(seatsBooked);
+//	         System.out.println("flgithsbooks" + flight.getFlightSeatsBook());
+	         
 	         // Save the reservation
 	         reservationService.save(reservation);
-
+	         
 	         getData(model);
 	         reservationList(model);
 	         mav.setViewName("redirect:reservationForm");

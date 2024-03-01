@@ -47,9 +47,9 @@ public class Flight {
 	@DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
 	private LocalTime flightArrivalTime;
 	
-	private int flightCapacity;
+	private Integer flightCapacity;
 	
-	private double flightPrice;
+	private Double flightPrice;
 	
 	private int flightSeatsBook;
 	

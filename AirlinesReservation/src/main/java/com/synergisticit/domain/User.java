@@ -5,6 +5,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -35,6 +37,7 @@ public class User {
 	private String mobileNo;
 	
 	@OneToMany(fetch = FetchType.EAGER)
+	@JsonIgnore
 	private List<Role> roles = new ArrayList<>();
 	
 }

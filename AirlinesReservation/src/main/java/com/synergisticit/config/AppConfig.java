@@ -5,6 +5,7 @@ import java.util.Properties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -71,6 +72,11 @@ public class AppConfig {
 //	NoOpPasswordEncoder noOpPasswordEncoder() {
 //		return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
 //	}
+	
+	@Bean
+    public JdbcTemplate jdbcTemplate() {
+        return new JdbcTemplate(dataSource());
+    }
 	
 	@Bean
 	BCryptPasswordEncoder bCryptPasswordEncoder() {

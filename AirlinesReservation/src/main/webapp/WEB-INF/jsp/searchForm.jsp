@@ -1,13 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="f"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
 <meta charset="ISO-8859-1">
-<title>Flight List</title>
+<title>Search Form</title>
 <style type="text/css">
 .error
 (
@@ -34,6 +35,8 @@ color
 	<sec:authorize access="isAuthenticated()">
 	<td>|</td>
 		<br> loggedInUser: ${loggedInUser}
+	    <br>Granted Authorities: <sec:authentication property="principal.authorities"/>
+		
 		<td><a href="logout">Logout</a></td>
 	</sec:authorize>
 	<td></td>
@@ -46,7 +49,41 @@ color
 
 <body>
 	<div align="center">
-		<h1>Flight List</h1>
+		<h1>Search Form</h1>
+		
+		<f:form action="saveSearch" modelAttribute="search">
+			<table>
+				
+				<tr>
+					<td>Depart From:</td>
+					<td><f:input path="searchFlightDepartureCity" value="${search.searchFlightDepartureCity}"/></td>
+					<td><f:errors path="searchFlightDepartureCity" cssClass="error" /></td>
+				</tr>
+				
+				<tr>
+					<td>Arrive To:</td>
+					<td><f:input path="searchFlightArrivalCity" value="${search.searchFlightArrivalCity}"/></td>
+					<td><f:errors path="searchFlightArrivalCity" cssClass="error" /></td>
+				</tr>
+
+				
+				<tr>
+					<td>From:</td><td><f:input type="datetime-local"  path="searchFromDateTime" name="searchFromDateTime"  value="${search.getSearchFromDateTime()}"/></td>
+					<td><f:errors path="searchFromDateTime" cssClass="error" /></td>
+				</tr>
+				
+				<tr>
+					<td>To:</td><td><f:input type="datetime-local"  path="searchToDateTime" name="searchToDateTime"  value="${search.getSearchToDateTime()}"/></td>
+					<td><f:errors path="searchToDateTime" cssClass="error" /></td>
+				</tr>
+				
+				 			
+			</table>
+			<tr>
+				<td colspan="2" align="center"><input type="submit"   value="Submit" /></td>
+			</tr>
+		</f:form>
+		
 	</div>
 	<p></p>
 	<p></p>
@@ -85,10 +122,7 @@ color
 					<td>${flight.getFlightSeatsBook()}</td>
 					<td><a href="passengerForm?flightId=${flight.getFlightId()}">Make A Reservation</a></td>
 
-					<sec:authorize access="hasAuthority('Admin')">
-						<td><a href="updateFlight?flightId=${flight.getFlightId()}">Update</a></td>
-						<td><a href="deleteFlight?flightId=${flight.getFlightId()}">Delete</a></td>
-					</sec:authorize>
+			
 				</tr>
 			</c:forEach>
 

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="f"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
@@ -26,13 +27,16 @@ color
 	<td><a href="airportForm">Airport Form</a></td><td>|</td>
 	<td><a href="airlineForm">Airline Form</a></td><td>|</td>
 	<td><a href="flightForm">Flight Form</a></td><td>|</td>
-	<td><a href="passengerForm">Passenger Form</a></td><td>|</td>
+	<td><a href="searchForm">Search Form</a></td><td>|</td>
+	<td><a href="searchUserInfoForm">Search User Form</a></td><td>|</td>
+	<td><a href="passengerList">Passenger List</a></td><td>|</td>
 	<td><a href="reservationList">Reservation List</a></td>
 	
 	
 	<sec:authorize access="isAuthenticated()">
 	<td>|</td>
 		<br> loggedInUser: ${loggedInUser}
+		<br>Granted Authorities: <sec:authentication property="principal.authorities"/>
 		<td><a href="logout">Logout</a></td>
 	</sec:authorize>
 	<td></td>

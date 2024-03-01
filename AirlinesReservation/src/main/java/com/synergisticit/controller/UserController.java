@@ -18,6 +18,7 @@ import com.synergisticit.domain.User;
 import com.synergisticit.service.RoleService;
 import com.synergisticit.service.UserService;
 //import com.synergisticit.validation.UserValidator;
+import com.synergisticit.validation.UserValidator;
 
 import jakarta.validation.Valid;
 
@@ -26,12 +27,12 @@ public class UserController {
 	
 	@Autowired UserService userService;
 	@Autowired RoleService roleService;
-	//@Autowired UserValidator userValidator;
+	@Autowired UserValidator userValidator;
 	
-//	@InitBinder
-//	public void initBinder(WebDataBinder binder) {
-//		binder.addValidators(userValidator);
-//	}
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.addValidators(userValidator);
+	}
 	
 	@RequestMapping("/userForm")
 	public String userForm(User user, Model model, Principal principal) {

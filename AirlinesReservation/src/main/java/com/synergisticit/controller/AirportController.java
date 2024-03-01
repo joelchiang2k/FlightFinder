@@ -19,6 +19,7 @@ import com.synergisticit.domain.Airport;
 import com.synergisticit.domain.Flight;
 import com.synergisticit.service.AirportService;
 import com.synergisticit.service.FlightService;
+import com.synergisticit.validation.AirportValidator;
 
 import jakarta.validation.Valid;
 
@@ -26,12 +27,12 @@ import jakarta.validation.Valid;
 public class AirportController {
 	@Autowired AirportService airportService;
 	@Autowired FlightService flightService;
-	//@Autowired AccountValidator accountValidator;
+	@Autowired AirportValidator airportValidator;
 	
-//	@InitBinder
-//	public void initBinder(WebDataBinder binder) {
-//		binder.addValidators(accountValidator);
-//	}
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.addValidators(airportValidator);
+	}
 	
 	@RequestMapping("/airportForm")
 	public ModelAndView airportForm(Airport airport, Model model, Principal principal) {
@@ -81,16 +82,13 @@ public class AirportController {
 	
 	 @RequestMapping("/showArrivals")
 	    public String showArrivals(@RequestParam("airportCode") String airportCode, Model model) {
-	        // Retrieve arrivals information based on the airportCode
-	        // You can use airportService or any other service to fetch the required data
-
-	        // For example:
+	        
 	        List<Flight> flights = flightService.findByCode(airportCode);
 	   
-	        // Add the arrivals information to the model
+	     
 	        model.addAttribute("flights", flights);
 
-	        return "flightList"; // Change this to the name of your JSP page for arrivals
+	        return "flightList"; 
 	    }
 	
 	public void airportList(Model model) {

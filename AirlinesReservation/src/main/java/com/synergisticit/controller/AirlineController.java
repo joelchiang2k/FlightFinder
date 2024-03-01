@@ -18,18 +18,19 @@ import com.synergisticit.domain.Airline;
 import com.synergisticit.domain.Airport;
 import com.synergisticit.service.AirlineService;
 import com.synergisticit.service.AirportService;
+import com.synergisticit.validation.AirlineValidator;
 
 import jakarta.validation.Valid;
 
 @Controller
 public class AirlineController {
 	@Autowired AirlineService airlineService;
-	//@Autowired AccountValidator accountValidator;
+	@Autowired AirlineValidator accountValidator;
 	
-//	@InitBinder
-//	public void initBinder(WebDataBinder binder) {
-//		binder.addValidators(accountValidator);
-//	}
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.addValidators(accountValidator);
+	}
 	
 	@RequestMapping("/airlineForm")
 	public ModelAndView airportForm(Airline airline, Model model, Principal principal) {

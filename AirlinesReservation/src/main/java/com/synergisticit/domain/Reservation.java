@@ -5,6 +5,9 @@ import java.util.List;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,10 +23,13 @@ public class Reservation {
 	@Id
 	private Long reservationId; //ticket number
 	
+	@OneToMany(mappedBy = "reservation", fetch = FetchType.LAZY)
+	private List<Passenger> passengers;
+	
 	@OneToOne
 	private Passenger passenger;
 	
-	@OneToOne
+	@ManyToOne
 	private Flight flight;
 	
 	public Long getReservationId() {
@@ -34,14 +40,6 @@ public class Reservation {
 		this.reservationId = reservationId;
 	}
 
-	public Passenger getPassenger() {
-		System.out.println("getpassenger" + passenger);
-		return passenger;
-	}
-
-	public void setPassenger(Passenger passenger) {
-		this.passenger = passenger;
-	}
 
 	public Flight getFlight() {
 		return flight;
@@ -65,6 +63,22 @@ public class Reservation {
 
 	public void setCheckedIn(String checkedIn) {
 		this.checkedIn = checkedIn;
+	}
+
+	public List<Passenger> getPassengers() {
+		return passengers;
+	}
+
+	public void setPassengers(List<Passenger> passengers) {
+		this.passengers = passengers;
+	}
+
+	public Passenger getPassenger() {
+		return passenger;
+	}
+
+	public void setPassenger(Passenger passenger) {
+		this.passenger = passenger;
 	}
 
 	private int checkedBags;
